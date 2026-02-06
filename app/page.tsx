@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   motion,
   useScroll,
   useTransform,
-  useSpring,
   AnimatePresence,
 } from 'framer-motion';
 import confetti from 'canvas-confetti';
@@ -13,18 +12,18 @@ import {
   Crown,
   MapPin,
   Calendar,
-  Clock,
   Gift,
   Music,
   Wine,
   Camera,
   X,
-  Check,
   ChevronDown,
   Star,
-  Play,
   Award,
-  Utensils
+  Utensils,
+  Navigation,
+  Mail,
+  Users
 } from 'lucide-react';
 
 // --- DATA ---
@@ -36,14 +35,15 @@ const DATA = {
   date: "Samedi 14 Novembre 2026",
   place: {
     name: "Rooftop du Kube",
-    address: "1 Passage Ruelle, Paris 18",
-    map: "https://maps.google.com"
+    address: "1 Passage Ruelle, 75018 Paris",
+    google_maps: "https://goo.gl/maps/example",
+    waze: "https://waze.com/ul/example"
   },
   images: {
-    hero: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=1920&auto=format&fit=crop", // Gold Party Vibes
-    portrait: "https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800&auto=format&fit=crop", // Stylish man 50s
-    party: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1920&auto=format&fit=crop", // Disco / DJ
-    retro: "https://images.unsplash.com/photo-1550951298-5c7b95a66b21?q=80&w=1920&auto=format&fit=crop" // Abstract lights
+    hero: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=1920&auto=format&fit=crop",
+    // NOUVELLE PHOTO : Homme 50 ans, charismatique, élégant, N&B
+    portrait: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop", 
+    party: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1920&auto=format&fit=crop",
   },
   timeline: [
     { year: "1976", title: "La Légende commence", desc: "Un grand millésime. Steve Jobs lance Apple, et Marc arrive sur Terre." },
@@ -132,6 +132,7 @@ export default function Birthday50Page() {
       <HeroSection />
       <StorySection />
       <PortraitSection />
+      <LocationSection />
       <ProgramSection />
       <GalleryTeaser />
       
@@ -166,13 +167,11 @@ function HeroSection() {
   
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-       {/* Background Video/Image Parallax */}
        <motion.div style={{ y }} className="absolute inset-0 z-0">
           <img src={DATA.images.hero} className="w-full h-full object-cover opacity-60" alt="Party" />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
        </motion.div>
 
-       {/* Content */}
        <div className="relative z-10 text-center px-4 mix-blend-screen">
           <motion.div 
             initial={{ scale: 5, opacity: 0 }} 
@@ -245,7 +244,6 @@ function StorySection() {
 function PortraitSection() {
   return (
     <section className="py-24 bg-black relative overflow-hidden">
-       {/* Background Text */}
        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full overflow-hidden opacity-5 pointer-events-none select-none">
           <h2 className="text-[20vw] whitespace-nowrap font-black text-white leading-none">VINTAGE 1976</h2>
        </div>
@@ -276,26 +274,53 @@ function PortraitSection() {
              <p className="text-xl text-neutral-300 leading-relaxed mb-8">
                "On n'a pas 50 ans tous les jours. C'est l'occasion unique de réunir ceux qui ont marqué ma vie, de la cour de récré aux salles de réunion, des vacances en famille aux soirées inoubliables."
              </p>
-             <div className="flex gap-4">
-               <div className="flex flex-col">
-                  <span className="text-3xl font-bold text-white">18,250</span>
-                  <span className="text-xs text-neutral-500 uppercase tracking-widest">Jours vécus</span>
-               </div>
-               <div className="w-px h-12 bg-white/20"></div>
-               <div className="flex flex-col">
-                  <span className="text-3xl font-bold text-white">Infinite</span>
-                  <span className="text-xs text-neutral-500 uppercase tracking-widest">Souvenirs</span>
-               </div>
-             </div>
           </div>
        </div>
     </section>
   );
 }
 
+// --- NOUVELLE SECTION : LIEU & ACCÈS ---
+function LocationSection() {
+    return (
+        <section className="py-24 bg-neutral-900 border-y border-white/10 relative overflow-hidden">
+             <div className="container mx-auto px-6 max-w-5xl flex flex-col md:flex-row items-center gap-12">
+                 <div className="w-full md:w-1/2">
+                     <div className="bg-black p-8 rounded-2xl border border-yellow-500/30">
+                         <div className="flex items-center gap-3 mb-4 text-yellow-500">
+                             <MapPin className="w-6 h-6" />
+                             <span className="font-bold uppercase tracking-widest text-sm">Le Lieu</span>
+                         </div>
+                         <h2 className="text-4xl font-black text-white mb-2">{DATA.place.name}</h2>
+                         <p className="text-xl text-neutral-400 mb-8">{DATA.place.address}</p>
+                         
+                         <div className="flex flex-col gap-3">
+                             <a href={DATA.place.google_maps} target="_blank" className="flex items-center justify-center gap-2 bg-white text-black font-bold py-4 rounded-lg hover:bg-neutral-200 transition-colors w-full">
+                                 <Navigation size={18} /> Ouvrir Google Maps
+                             </a>
+                             <a href={DATA.place.waze} target="_blank" className="flex items-center justify-center gap-2 bg-[#33CCFF] text-white font-bold py-4 rounded-lg hover:bg-[#33CCFF]/80 transition-colors w-full">
+                                 <Navigation size={18} /> Ouvrir Waze
+                             </a>
+                         </div>
+                     </div>
+                 </div>
+                 
+                 <div className="w-full md:w-1/2">
+                      <div className="aspect-video bg-black rounded-2xl overflow-hidden border border-white/10 relative group">
+                          <img src={DATA.images.party} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" alt="Lieu" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="bg-black/50 backdrop-blur px-6 py-2 rounded-full text-white text-sm uppercase tracking-widest border border-white/20">Vue Panoramique</span>
+                          </div>
+                      </div>
+                 </div>
+             </div>
+        </section>
+    )
+}
+
 function ProgramSection() {
   return (
-    <section className="py-32 bg-neutral-900 border-y border-white/10">
+    <section className="py-32 bg-black">
        <div className="container mx-auto px-6 max-w-4xl text-center">
           <h2 className="text-4xl md:text-6xl font-black text-white mb-16">LE PROGRAMME</h2>
           
@@ -314,7 +339,7 @@ function ProgramItem({ time, title, icon, desc }: any) {
   return (
     <motion.div 
       initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
-      className="flex items-center gap-6 bg-black p-6 rounded-xl border border-white/5 hover:border-yellow-500 transition-colors group text-left"
+      className="flex items-center gap-6 bg-neutral-900 p-6 rounded-xl border border-white/5 hover:border-yellow-500 transition-colors group text-left"
     >
        <div className="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center text-yellow-500 group-hover:scale-110 transition-transform shrink-0">
           {icon}
@@ -332,7 +357,7 @@ function ProgramItem({ time, title, icon, desc }: any) {
 
 function GalleryTeaser() {
   return (
-    <section className="py-24 bg-black relative">
+    <section className="py-24 bg-neutral-900 relative border-t border-white/10">
        <div className="container mx-auto px-6 text-center">
           <Camera className="w-12 h-12 text-yellow-500 mx-auto mb-6" />
           <h2 className="text-4xl font-bold text-white mb-6">MUR DE SOUVENIRS</h2>
@@ -347,32 +372,70 @@ function GalleryTeaser() {
   );
 }
 
+// --- RSVP MODAL (AMÉLIORÉ) ---
 function RsvpModal({ onClose }: any) {
+  const [adults, setAdults] = useState(1);
+
   return (
     <motion.div 
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
     >
-       <div className="bg-neutral-900 border border-yellow-500/30 p-8 rounded-2xl max-w-md w-full relative">
+       <div className="bg-neutral-900 border border-yellow-500/30 p-8 rounded-2xl max-w-md w-full relative max-h-[90vh] overflow-y-auto">
           <button onClick={onClose} className="absolute top-4 right-4 text-neutral-500 hover:text-white"><X /></button>
           
           <h3 className="text-3xl font-black text-white mb-2 uppercase text-center">Confirmation</h3>
           <p className="text-center text-yellow-500 text-sm mb-8 uppercase tracking-widest">Avant le 1er Octobre</p>
           
           <div className="space-y-4">
-             <input type="text" placeholder="Prénom & Nom" className="w-full bg-black border border-white/10 p-4 rounded-lg text-white outline-none focus:border-yellow-500 transition-colors" />
+             {/* Identité */}
+             <div className="grid grid-cols-2 gap-4">
+                 <div>
+                    <label className="block text-[10px] font-bold text-neutral-500 mb-1 uppercase">Prénom</label>
+                    <input type="text" className="w-full bg-black border border-white/10 p-4 rounded-lg text-white outline-none focus:border-yellow-500 transition-colors" placeholder="Jean" />
+                 </div>
+                 <div>
+                    <label className="block text-[10px] font-bold text-neutral-500 mb-1 uppercase">Nom</label>
+                    <input type="text" className="w-full bg-black border border-white/10 p-4 rounded-lg text-white outline-none focus:border-yellow-500 transition-colors" placeholder="Dupont" />
+                 </div>
+             </div>
+
+             {/* Email */}
+             <div>
+                <label className="block text-[10px] font-bold text-neutral-500 mb-1 uppercase flex items-center gap-2">
+                    <Mail size={12} /> Email
+                </label>
+                <input type="email" className="w-full bg-black border border-white/10 p-4 rounded-lg text-white outline-none focus:border-yellow-500 transition-colors" placeholder="jean.dupont@email.com" />
+             </div>
              
-             <div className="space-y-2">
-                <label className="flex items-center gap-3 p-3 bg-black rounded-lg cursor-pointer hover:bg-white/5">
+             {/* Checkbox Présence */}
+             <div className="bg-yellow-500/5 p-4 rounded-lg border border-yellow-500/20">
+                <label className="flex items-center gap-3 cursor-pointer">
                    <input type="checkbox" className="w-5 h-5 accent-yellow-500" defaultChecked />
                    <span className="text-white font-bold">Je serai là pour célébrer !</span>
                 </label>
              </div>
+
+             {/* Compteur Invités */}
+             <div>
+                <label className="block text-[10px] font-bold text-neutral-500 mb-2 uppercase flex items-center gap-2">
+                    <Users size={12} /> Nombre de personnes
+                </label>
+                <div className="flex items-center bg-black border border-white/10 rounded-lg px-2">
+                    <button onClick={() => setAdults(Math.max(1, adults-1))} className="p-4 text-neutral-400 hover:text-white">-</button>
+                    <span className="flex-1 text-center text-white font-bold text-xl">{adults}</span>
+                    <button onClick={() => setAdults(adults+1)} className="p-4 text-neutral-400 hover:text-white">+</button>
+                </div>
+             </div>
              
-             <textarea placeholder="Un petit mot pour le livre d'or..." className="w-full bg-black border border-white/10 p-4 rounded-lg text-white outline-none focus:border-yellow-500 transition-colors h-24"></textarea>
+             {/* Message */}
+             <div>
+                <label className="block text-[10px] font-bold text-neutral-500 mb-1 uppercase">Un petit mot pour Marc ?</label>
+                <textarea className="w-full bg-black border border-white/10 p-4 rounded-lg text-white outline-none focus:border-yellow-500 transition-colors h-24" placeholder="Joyeux anniversaire..."></textarea>
+             </div>
              
              <button className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-lg uppercase tracking-widest text-sm transition-colors shadow-lg shadow-yellow-500/20">
-                Valider
+                Valider ma réponse
              </button>
           </div>
        </div>
