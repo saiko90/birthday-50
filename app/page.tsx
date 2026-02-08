@@ -8,6 +8,7 @@ import {
   AnimatePresence,
 } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import NeoCardFloatingBadge from './components/NeoCardFloatingBadge';
 import {
   Crown,
   MapPin,
@@ -150,6 +151,7 @@ export default function Birthday50Page() {
       <AnimatePresence>
         {isRsvpOpen && <RsvpModal onClose={() => setRsvpOpen(false)} />}
       </AnimatePresence>
+      <NeoCardFloatingBadge theme="light" />
       
       <footer className="py-20 text-center border-t border-white/10 bg-neutral-900">
         <h2 className="text-[15vw] leading-none font-black text-white/5 select-none">{DATA.birth_year}</h2>
