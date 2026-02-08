@@ -104,6 +104,7 @@ export default function Birthday50Page() {
         <div className="z-10 text-center space-y-8 p-6">
            <div className="inline-block border-2 border-yellow-500/50 p-8 rounded-full bg-black/50 backdrop-blur-md">
               <Crown className="w-16 h-16 text-yellow-500 mx-auto" />
+              
            </div>
            <div>
              <h1 className="text-6xl font-black text-white tracking-tighter mb-2">GOLDEN 50</h1>
@@ -123,6 +124,7 @@ export default function Birthday50Page() {
            </form>
            <p className="text-white/20 text-xs mt-4">Code: GOLD50</p>
         </div>
+        <NeoCardFloatingBadge theme="light" />
       </div>
     );
   }
